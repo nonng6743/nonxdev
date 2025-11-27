@@ -7,13 +7,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - BACKEND_URL=http://backend:8080
-    command: npm run dev
+    restart: unless-stopped
+    depends_on:
+      - backend
 
   backend:
     build:
@@ -21,12 +20,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
     environment:
+      - NODE_ENV=production
       - PORT=8080
       - ADDRESS=0.0.0.0
       - EMAIL_USER=${EMAIL_USER}
       - EMAIL_PASS=${EMAIL_PASS}
-    command: npm start
+    restart: unless-stopped
