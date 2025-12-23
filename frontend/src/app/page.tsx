@@ -2,6 +2,7 @@
 
 import Hero from '@/components/layout/Hero';
 import Services from '@/components/layout/Services';
+import Portfolio from '@/components/layout/Portfolio';
 import Trust from '@/components/layout/Trust';
 import SmoothScroll from '@/components/layout/SmoothScroll';
 import { useLanguage } from '@/components/layout/LanguageProvider';
@@ -14,6 +15,7 @@ export default function Home() {
       <main className="min-h-screen bg-black text-white selection:bg-indigo-500 selection:text-white">
         <Hero />
         <Services />
+        <Portfolio />
         <Trust />
         
         <section className="py-20 text-center border-t border-neutral-900">

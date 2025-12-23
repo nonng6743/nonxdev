@@ -27,6 +27,18 @@ export const dictionaries = {
         }
       ]
     },
+    portfolio: {
+      headline: "Selected Work",
+      view_project: "View Project",
+      items: [
+        {
+          title: "Map3D Visualization",
+          category: "WebGL / Geospatial",
+          description: "High-performance interactive 3D mapping platform for enterprise data visualization.",
+          link: "https://map3d.nonxdev.com/"
+        }
+      ]
+    },
     trust: {
       headline: "Why Choose nonxdev?",
       security: {
@@ -74,6 +86,18 @@ export const dictionaries = {
         {
           title: "ระบบ AI และ Automation",
           description: "พัฒนาระบบ AI ช่วยตอบแชท หรือทำงานเอกสารอัตโนมัติ ลดต้นทุน เพิ่มประสิทธิภาพองค์กร"
+        }
+      ]
+    },
+    portfolio: {
+      headline: "ผลงานของเรา",
+      view_project: "ดูผลงาน",
+      items: [
+        {
+          title: "Map3D Visualization",
+          category: "WebGL / Geospatial",
+          description: "แพลตฟอร์มแผนที่ 3 มิติเชิงโต้ตอบสำหรับแสดงข้อมูลระดับองค์กร ประสิทธิภาพสูง",
+          link: "https://map3d.nonxdev.com/"
         }
       ]
     },
