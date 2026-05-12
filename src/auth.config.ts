@@ -1,6 +1,9 @@
 import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
+  // Trust the Host header from the upstream proxy (nginx / Caddy / PM2 behind LB).
+  // Required when not deploying on Vercel; Auth.js v5 refuses unknown hosts by default.
+  trustHost: true,
   pages: {
     signIn: '/finance/login',
   },
