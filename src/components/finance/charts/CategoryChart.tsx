@@ -36,44 +36,46 @@ export default function CategoryChart({ data, categoryNames }: Props) {
           ยังไม่มีรายจ่ายเดือนนี้
         </div>
       ) : (
-        <div className="flex items-center gap-6 h-full">
-          <ResponsiveContainer width="55%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                dataKey="value"
-                nameKey="category"
-                cx="50%"
-                cy="50%"
-                innerRadius="60%"
-                outerRadius="90%"
-                paddingAngle={2}
-                strokeWidth={0}
-              >
-                {data.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  background: '#0a0907',
-                  border: '1px solid rgba(212,175,55,0.25)',
-                  borderRadius: 12,
-                  color: '#fafafa',
-                  fontSize: 12,
-                }}
-                formatter={(value, _n, item) => {
-                  const v = Number(value ?? 0);
-                  return [
-                    `${formatTHB(v)} (${total ? ((v / total) * 100).toFixed(0) : 0}%)`,
-                    resolveName((item.payload as CategoryPoint).category, categoryNames),
-                  ];
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="flex flex-col sm:flex-row items-stretch gap-4 sm:gap-6 h-full">
+          <div className="h-40 sm:h-full w-full sm:w-1/2">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={data}
+                  dataKey="value"
+                  nameKey="category"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius="60%"
+                  outerRadius="90%"
+                  paddingAngle={2}
+                  strokeWidth={0}
+                >
+                  {data.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    background: '#0a0907',
+                    border: '1px solid rgba(212,175,55,0.25)',
+                    borderRadius: 12,
+                    color: '#fafafa',
+                    fontSize: 12,
+                  }}
+                  formatter={(value, _n, item) => {
+                    const v = Number(value ?? 0);
+                    return [
+                      `${formatTHB(v)} (${total ? ((v / total) * 100).toFixed(0) : 0}%)`,
+                      resolveName((item.payload as CategoryPoint).category, categoryNames),
+                    ];
+                  }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
 
-          <ul className="flex-1 space-y-2 max-h-full overflow-y-auto pr-1 text-sm">
+          <ul className="flex-1 space-y-2 max-h-40 sm:max-h-full overflow-y-auto pr-1 text-sm">
             {data.map((d, i) => {
               const pct = total ? (d.value / total) * 100 : 0;
               return (

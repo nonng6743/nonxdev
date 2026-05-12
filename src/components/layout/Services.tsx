@@ -25,10 +25,10 @@ export default function Services() {
   const { products, agency } = dict.services;
 
   return (
-    <section id="services" className="relative py-32">
+    <section id="services" className="relative py-20 sm:py-32 overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px gold-divider" />
 
-      <div className="container-custom space-y-32">
+      <div className="container-custom space-y-20 sm:space-y-32">
         <ServiceGroup
           id="products"
           eyebrow={products.eyebrow}
@@ -75,17 +75,17 @@ type GroupProps = {
 function ServiceGroup({ id, eyebrow, title, subtitle, items, accents, icons }: GroupProps) {
   return (
     <div id={id} className="scroll-mt-32">
-      <div className="text-center max-w-2xl mx-auto mb-20">
-        <div className="flex items-center justify-center gap-3 mb-5">
-          <span className="h-px w-10 bg-gold-400/40" />
-          <span className="text-[11px] uppercase tracking-[0.35em] text-gold-300">{eyebrow}</span>
-          <span className="h-px w-10 bg-gold-400/40" />
+      <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-20">
+        <div className="flex items-center justify-center gap-3 mb-4 sm:mb-5">
+          <span className="h-px w-8 sm:w-10 bg-gold-400/40" />
+          <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.3em] sm:tracking-[0.35em] text-gold-300">{eyebrow}</span>
+          <span className="h-px w-8 sm:w-10 bg-gold-400/40" />
         </div>
-        <h2 className="text-4xl md:text-6xl font-bold gold-gradient-text mb-4">{title}</h2>
-        <p className="text-neutral-400 text-lg">{subtitle}</p>
+        <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold gold-gradient-text mb-3 sm:mb-4">{title}</h2>
+        <p className="text-neutral-400 text-base sm:text-lg">{subtitle}</p>
       </div>
 
-      <div className="space-y-32">
+      <div className="space-y-20 sm:space-y-32">
         {items.map((service, index) => (
           <ServiceCard
             key={index}
@@ -115,40 +115,40 @@ function ServiceCard({ service, index, accent, Icon }: ServiceCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true, margin: '-100px' }}
-      className={`flex flex-col ${reversed ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-12 md:gap-20`}
+      className={`flex flex-col ${reversed ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-8 md:gap-20`}
     >
-      <div className="w-full md:w-1/2 relative aspect-[4/3] rounded-3xl overflow-hidden border border-gold-400/15 bg-ink-900">
+      <div className="w-full md:w-1/2 relative aspect-[4/3] rounded-2xl md:rounded-3xl overflow-hidden border border-gold-400/15 bg-ink-900">
         <div className={`absolute inset-0 bg-gradient-to-br ${accent}`} />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(212,175,55,0.18),transparent_60%)]" />
 
-        <div className="absolute top-6 left-6 flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-gold-300/80">
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-2 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-gold-300/80">
           <span className="font-mono">{String(index + 1).padStart(2, '0')}</span>
           <span className="h-px w-6 bg-gold-400/40" />
         </div>
 
-        <span className="absolute -bottom-10 -right-4 text-[14rem] font-black leading-none gold-gradient-text opacity-[0.07] select-none">
+        <span className="absolute -bottom-6 -right-2 text-[8rem] sm:text-[10rem] md:text-[14rem] font-black leading-none gold-gradient-text opacity-[0.07] select-none">
           {index + 1}
         </span>
 
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative">
             <div className="absolute inset-0 blur-3xl bg-gold-400/25 rounded-full" />
-            <div className="relative w-24 h-24 rounded-2xl border border-gold-400/30 bg-ink-800/60 backdrop-blur-md flex items-center justify-center">
-              <Icon className="w-10 h-10 text-gold-300" />
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border border-gold-400/30 bg-ink-800/60 backdrop-blur-md flex items-center justify-center">
+              <Icon className="w-8 h-8 sm:w-10 sm:h-10 text-gold-300" />
             </div>
           </div>
         </div>
       </div>
 
       <div className="w-full md:w-1/2">
-        <div className="flex items-center gap-3 mb-4 text-[11px] uppercase tracking-[0.3em] text-gold-300/80">
+        <div className="flex items-center gap-3 mb-3 sm:mb-4 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-gold-300/80">
           <span className="h-px w-8 bg-gold-400/50" />
           Service {String(index + 1).padStart(2, '0')}
         </div>
-        <h3 className="text-3xl md:text-5xl font-bold mb-5 text-neutral-50 leading-[1.1]">
+        <h3 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 sm:mb-5 text-neutral-50 leading-[1.15]">
           {service.title}
         </h3>
-        <p className="text-lg md:text-xl text-neutral-400 leading-relaxed">
+        <p className="text-base sm:text-lg md:text-xl text-neutral-400 leading-relaxed">
           {service.description}
         </p>
 

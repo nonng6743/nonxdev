@@ -63,9 +63,9 @@ function Row({ t, categoryNames }: { t: ListedTransaction; categoryNames?: Recor
   const dateLabel = d.toLocaleDateString('th-TH', { day: '2-digit', month: 'short' });
 
   return (
-    <li className="group flex items-center gap-4 px-6 py-3.5 hover:bg-ink-800/50 transition-colors">
+    <li className="group flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 sm:py-3.5 hover:bg-ink-800/50 transition-colors">
       <div
-        className={`shrink-0 w-9 h-9 rounded-lg border flex items-center justify-center ${
+        className={`shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg border flex items-center justify-center ${
           isIncome
             ? 'border-emerald-400/30 bg-emerald-500/10 text-emerald-300'
             : 'border-rose-400/30 bg-rose-500/10 text-rose-300'
@@ -79,10 +79,10 @@ function Row({ t, categoryNames }: { t: ListedTransaction; categoryNames?: Recor
           {resolveCategoryName(t.category, categoryNames)}
           {t.description ? <span className="text-neutral-500 font-normal"> · {t.description}</span> : null}
         </div>
-        <div className="text-xs text-neutral-500 mt-0.5">{dateLabel}</div>
+        <div className="text-[11px] sm:text-xs text-neutral-500 mt-0.5">{dateLabel}</div>
       </div>
 
-      <div className={`text-sm font-semibold tabular-nums ${isIncome ? 'text-emerald-300' : 'text-rose-300'}`}>
+      <div className={`shrink-0 text-sm font-semibold tabular-nums ${isIncome ? 'text-emerald-300' : 'text-rose-300'}`}>
         {isIncome ? '+' : '−'}
         {formatTHB(t.amount)}
       </div>
@@ -92,7 +92,7 @@ function Row({ t, categoryNames }: { t: ListedTransaction; categoryNames?: Recor
         onClick={onDelete}
         disabled={pending}
         aria-label="ลบ"
-        className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-rose-300 transition-all disabled:opacity-30"
+        className="shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-neutral-500 hover:text-rose-300 transition-all disabled:opacity-30"
       >
         <Trash2 className="w-4 h-4" />
       </button>

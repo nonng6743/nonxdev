@@ -22,7 +22,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-gold-400)]/30 bg-[color:var(--color-ink-900)]/60 backdrop-blur px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-[color:var(--color-gold-200)] mb-8"
+          className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-gold-400)]/30 bg-[color:var(--color-ink-900)]/60 backdrop-blur px-3.5 py-1.5 text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[color:var(--color-gold-200)] mb-6 sm:mb-8 max-w-[calc(100vw-3rem)]"
         >
           <Sparkles className="w-3.5 h-3.5" />
           Premium Software Studio
@@ -33,7 +33,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: 'easeOut' }}
         >
-          <h1 className="text-6xl md:text-[9rem] leading-[0.95] font-black tracking-tighter mb-6 gold-gradient-text">
+          <h1 className="text-5xl sm:text-7xl md:text-[9rem] leading-[0.95] font-black tracking-tighter mb-5 sm:mb-6 gold-gradient-text">
             {dict.hero.title_line1}
             <br />
             {dict.hero.title_line2}
@@ -44,7 +44,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="text-lg md:text-2xl text-neutral-300/90 max-w-3xl mx-auto mb-12 font-light"
+          className="text-base sm:text-lg md:text-2xl text-neutral-300/90 max-w-3xl mx-auto mb-10 sm:mb-12 font-light"
         >
           {dict.hero.subtitle_prefix}{' '}
           <span className="text-[color:var(--color-gold-300)] font-medium">
@@ -65,7 +65,7 @@ export default function Hero() {
         >
           <a
             href="#contact"
-            className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm tracking-wide
+            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm tracking-wide
                        bg-gradient-to-b from-[#f6d97a] via-[#d4af37] to-[#8c6a1f]
                        text-[color:var(--color-ink-900)] gold-glow
                        transition-transform duration-300 hover:scale-[1.03]"
@@ -75,7 +75,7 @@ export default function Hero() {
           </a>
           <a
             href="#portfolio"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-medium text-sm tracking-wide
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-medium text-sm tracking-wide
                        border border-[color:var(--color-gold-400)]/25 text-neutral-200
                        hover:border-[color:var(--color-gold-300)]/60 hover:text-white transition-colors"
           >

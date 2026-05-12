@@ -15,26 +15,26 @@ export default function Trust() {
   ];
 
   return (
-    <section className="relative py-32">
+    <section className="relative py-20 sm:py-32">
       <div className="absolute top-0 left-0 right-0 h-px gold-divider" />
 
       <div className="container-custom">
-        <div className="flex items-center justify-center gap-3 mb-6">
-          <span className="h-px w-10 bg-gold-400/40" />
-          <span className="text-[11px] uppercase tracking-[0.35em] text-gold-300">Why us</span>
-          <span className="h-px w-10 bg-gold-400/40" />
+        <div className="flex items-center justify-center gap-3 mb-5 sm:mb-6">
+          <span className="h-px w-8 sm:w-10 bg-gold-400/40" />
+          <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.3em] sm:tracking-[0.35em] text-gold-300">Why us</span>
+          <span className="h-px w-8 sm:w-10 bg-gold-400/40" />
         </div>
 
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-6xl font-bold mb-20 text-center gold-gradient-text"
+          className="text-3xl sm:text-4xl md:text-6xl font-bold mb-12 sm:mb-20 text-center gold-gradient-text"
         >
           {dict.trust.headline}
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {items.map(({ icon: Icon, title, desc }, i) => (
             <motion.div
               key={i}
@@ -42,7 +42,7 @@ export default function Trust() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.12 }}
-              className="group relative rounded-2xl border border-gold-400/15 bg-ink-900/50 p-8
+              className="group relative rounded-2xl border border-gold-400/15 bg-ink-900/50 p-6 sm:p-8
                          hover:border-gold-300/45 hover:bg-ink-800/60 transition-colors duration-500"
             >
               <div className="absolute -top-px left-6 right-6 h-px bg-linear-to-r from-transparent via-gold-400/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
