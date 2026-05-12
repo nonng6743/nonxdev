@@ -1,87 +1,168 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useScroll } from 'framer-motion';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { Code2, Smartphone, Sparkles, Wallet, ArrowUpRight } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useLanguage } from '@/components/layout/LanguageProvider';
 
-const colors = [
-  "from-blue-500 to-cyan-400",
-  "from-purple-500 to-pink-400",
-  "from-amber-500 to-orange-400"
+const productAccents = [
+  'from-[#f6d97a]/25 via-[#d4af37]/10 to-transparent',
 ];
+const productIcons: LucideIcon[] = [Wallet];
 
-const images = [
-  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop", // Abstract Digital/Web
-  "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=2574&auto=format&fit=crop", // Mobile/Tech
-  "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2565&auto=format&fit=crop"  // AI/Brain
+const agencyAccents = [
+  'from-[#fdf8e7]/20 via-[#d4af37]/10 to-transparent',
+  'from-[#f0c14b]/25 via-[#8c6a1f]/10 to-transparent',
+  'from-[#fbeec0]/20 via-[#b8902b]/10 to-transparent',
 ];
+const agencyIcons: LucideIcon[] = [Code2, Smartphone, Sparkles];
+
+type ServiceItem = { title: string; description: string; href?: string; cta?: string };
 
 export default function Services() {
   const { dict } = useLanguage();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
+  const { products, agency } = dict.services;
 
   return (
-    <section ref={containerRef} className="relative py-20 bg-neutral-950">
-      <div className="container-custom">
-        <motion.h2 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-4xl md:text-7xl font-bold mb-32 text-center"
-        >
-          {dict.services.headline}
-        </motion.h2>
+    <section id="services" className="relative py-32">
+      <div className="absolute top-0 left-0 right-0 h-px gold-divider" />
 
-        <div className="space-y-40">
-          {dict.services.items.map((service, index) => (
-            <ServiceCard 
-              key={index} 
-              service={service} 
-              index={index} 
-              color={colors[index]} 
-              image={images[index]}
-            />
-          ))}
+      <div className="container-custom space-y-32">
+        <ServiceGroup
+          id="products"
+          eyebrow={products.eyebrow}
+          title={products.title}
+          subtitle={products.subtitle}
+          items={products.items as ServiceItem[]}
+          accents={productAccents}
+          icons={productIcons}
+        />
+
+        <div className="relative">
+          <div className="absolute inset-x-0 top-1/2 h-px gold-divider" />
+          <div className="relative flex justify-center">
+            <span className="px-6 bg-background text-[10px] uppercase tracking-[0.4em] text-gold-300/60">
+              · · ·
+            </span>
+          </div>
         </div>
+
+        <ServiceGroup
+          id="agency"
+          eyebrow={agency.eyebrow}
+          title={agency.title}
+          subtitle={agency.subtitle}
+          items={agency.items as ServiceItem[]}
+          accents={agencyAccents}
+          icons={agencyIcons}
+        />
       </div>
     </section>
   );
 }
 
-function ServiceCard({ service, index, color, image }: { service: { title: string, description: string }, index: number, color: string, image: string }) {
-  return (
-    <motion.div 
-      initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.8, delay: 0.2 }}
-      viewport={{ once: false, margin: "-100px" }}
-      className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-10 md:gap-20`}
-    >
-      {/* Visual Side */}
-      <div className="w-full md:w-1/2 relative aspect-video rounded-3xl overflow-hidden group border border-white/10">
-        <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-20 group-hover:opacity-10 transition-opacity duration-500 z-10`} />
-        
-        {/* Image */}
-        <img 
-          src={image} 
-          alt={service.title} 
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80" 
-        />
+type GroupProps = {
+  id: string;
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  items: ServiceItem[];
+  accents: string[];
+  icons: LucideIcon[];
+};
 
-        {/* Number Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-           <span className="text-9xl font-black text-white/10 group-hover:text-white/20 transition-colors duration-500 blur-sm">{index + 1}</span>
+function ServiceGroup({ id, eyebrow, title, subtitle, items, accents, icons }: GroupProps) {
+  return (
+    <div id={id} className="scroll-mt-32">
+      <div className="text-center max-w-2xl mx-auto mb-20">
+        <div className="flex items-center justify-center gap-3 mb-5">
+          <span className="h-px w-10 bg-gold-400/40" />
+          <span className="text-[11px] uppercase tracking-[0.35em] text-gold-300">{eyebrow}</span>
+          <span className="h-px w-10 bg-gold-400/40" />
+        </div>
+        <h2 className="text-4xl md:text-6xl font-bold gold-gradient-text mb-4">{title}</h2>
+        <p className="text-neutral-400 text-lg">{subtitle}</p>
+      </div>
+
+      <div className="space-y-32">
+        {items.map((service, index) => (
+          <ServiceCard
+            key={index}
+            service={service}
+            index={index}
+            accent={accents[index % accents.length]}
+            Icon={icons[index % icons.length] ?? Sparkles}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+type ServiceCardProps = {
+  service: ServiceItem;
+  index: number;
+  accent: string;
+  Icon: LucideIcon;
+};
+
+function ServiceCard({ service, index, accent, Icon }: ServiceCardProps) {
+  const reversed = index % 2 === 1;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true, margin: '-100px' }}
+      className={`flex flex-col ${reversed ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-12 md:gap-20`}
+    >
+      <div className="w-full md:w-1/2 relative aspect-[4/3] rounded-3xl overflow-hidden border border-gold-400/15 bg-ink-900">
+        <div className={`absolute inset-0 bg-gradient-to-br ${accent}`} />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(212,175,55,0.18),transparent_60%)]" />
+
+        <div className="absolute top-6 left-6 flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-gold-300/80">
+          <span className="font-mono">{String(index + 1).padStart(2, '0')}</span>
+          <span className="h-px w-6 bg-gold-400/40" />
+        </div>
+
+        <span className="absolute -bottom-10 -right-4 text-[14rem] font-black leading-none gold-gradient-text opacity-[0.07] select-none">
+          {index + 1}
+        </span>
+
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative">
+            <div className="absolute inset-0 blur-3xl bg-gold-400/25 rounded-full" />
+            <div className="relative w-24 h-24 rounded-2xl border border-gold-400/30 bg-ink-800/60 backdrop-blur-md flex items-center justify-center">
+              <Icon className="w-10 h-10 text-gold-300" />
+            </div>
+          </div>
         </div>
       </div>
-      
-      {/* Content Side */}
+
       <div className="w-full md:w-1/2">
-        <h3 className="text-3xl md:text-5xl font-bold mb-4">{service.title}</h3>
-        <p className="text-xl text-gray-400">{service.description}</p>
+        <div className="flex items-center gap-3 mb-4 text-[11px] uppercase tracking-[0.3em] text-gold-300/80">
+          <span className="h-px w-8 bg-gold-400/50" />
+          Service {String(index + 1).padStart(2, '0')}
+        </div>
+        <h3 className="text-3xl md:text-5xl font-bold mb-5 text-neutral-50 leading-[1.1]">
+          {service.title}
+        </h3>
+        <p className="text-lg md:text-xl text-neutral-400 leading-relaxed">
+          {service.description}
+        </p>
+
+        {service.href && service.cta && (
+          <Link
+            href={service.href}
+            className="group inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-full font-semibold text-sm tracking-wide
+                       bg-linear-to-b from-gold-200 via-gold-400 to-gold-600 text-ink-900 gold-glow
+                       transition-transform duration-300 hover:scale-[1.03]"
+          >
+            {service.cta}
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
+        )}
       </div>
     </motion.div>
   );

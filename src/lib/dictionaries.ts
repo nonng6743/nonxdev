@@ -12,20 +12,38 @@ export const dictionaries = {
     },
     services: {
       headline: "Our Services",
-      items: [
-        {
-          title: "Custom Software Development",
-          description: "Tailored web applications, dashboards, and internal tools built to specific business requirements."
-        },
-        {
-          title: "Mobile & Web Apps",
-          description: "Cross-platform solutions that work flawlessly on every device using modern frameworks."
-        },
-        {
-          title: "Enterprise AI Integration",
-          description: "Automate workflows and enhance decision making with custom AI agents and LLM integrations."
-        }
-      ]
+      products: {
+        eyebrow: "Products",
+        title: "Our Products",
+        subtitle: "Ready-to-use applications you can sign up and try today.",
+        items: [
+          {
+            title: "Personal Finance Tracker",
+            description: "Beautiful, secure personal income & expense management system with insights, categories, and reports — built for everyday clarity.",
+            href: "/finance/signup",
+            cta: "Sign up free"
+          }
+        ]
+      },
+      agency: {
+        eyebrow: "Agency",
+        title: "Build with us",
+        subtitle: "Custom software, mobile apps, and AI systems tailored to your business.",
+        items: [
+          {
+            title: "Custom Software Development",
+            description: "Tailored web applications, dashboards, and internal tools built to specific business requirements."
+          },
+          {
+            title: "Mobile & Web Apps",
+            description: "Cross-platform solutions that work flawlessly on every device using modern frameworks."
+          },
+          {
+            title: "Enterprise AI Integration",
+            description: "Automate workflows and enhance decision making with custom AI agents and LLM integrations."
+          }
+        ]
+      }
     },
     portfolio: {
       headline: "Selected Work",
@@ -74,20 +92,38 @@ export const dictionaries = {
     },
     services: {
       headline: "บริการของเรา",
-      items: [
-        {
-          title: "รับทำเว็บไซต์และระบบ",
-          description: "พัฒนาเว็บแอปพลิเคชัน แดชบอร์ด และระบบหลังบ้าน ตามความต้องการของธุรกิจ (Custom Solutions)"
-        },
-        {
-          title: "โมบายแอปพลิเคชัน",
-          description: "รับทำแอปมือถือ (iOS/Android) ที่ใช้งานลื่นไหล รองรับทุกอุปกรณ์"
-        },
-        {
-          title: "ระบบ AI และ Automation",
-          description: "พัฒนาระบบ AI ช่วยตอบแชท หรือทำงานเอกสารอัตโนมัติ ลดต้นทุน เพิ่มประสิทธิภาพองค์กร"
-        }
-      ]
+      products: {
+        eyebrow: "Products",
+        title: "ผลิตภัณฑ์ของเรา",
+        subtitle: "ระบบพร้อมใช้ ที่คุณสมัครเข้าใช้งานได้ทันที",
+        items: [
+          {
+            title: "ระบบจัดการบันทึกรายรับรายจ่ายส่วนบุคคล",
+            description: "เว็บแอปสำหรับบันทึกและจัดหมวดหมู่รายรับ-รายจ่าย พร้อมสรุปยอด รายงาน และกราฟวิเคราะห์ ดีไซน์สวย ใช้งานง่าย เก็บข้อมูลปลอดภัย",
+            href: "/finance/signup",
+            cta: "สมัครใช้งานฟรี"
+          }
+        ]
+      },
+      agency: {
+        eyebrow: "Agency",
+        title: "บริการรับจ้างพัฒนา",
+        subtitle: "เว็บไซต์ โมบายแอป และระบบ AI ที่ออกแบบเฉพาะธุรกิจของคุณ",
+        items: [
+          {
+            title: "รับทำเว็บไซต์และระบบ",
+            description: "พัฒนาเว็บแอปพลิเคชัน แดชบอร์ด และระบบหลังบ้าน ตามความต้องการของธุรกิจ (Custom Solutions)"
+          },
+          {
+            title: "โมบายแอปพลิเคชัน",
+            description: "รับทำแอปมือถือ (iOS/Android) ที่ใช้งานลื่นไหล รองรับทุกอุปกรณ์"
+          },
+          {
+            title: "ระบบ AI และ Automation",
+            description: "พัฒนาระบบ AI ช่วยตอบแชท หรือทำงานเอกสารอัตโนมัติ ลดต้นทุน เพิ่มประสิทธิภาพองค์กร"
+          }
+        ]
+      }
     },
     portfolio: {
       headline: "ผลงานของเรา",
