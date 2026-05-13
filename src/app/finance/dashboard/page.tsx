@@ -1,18 +1,30 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Types } from 'mongoose';
-import { Wallet, ArrowDownCircle, ArrowUpCircle, TrendingUp, ListChecks, Tags } from 'lucide-react';
+import { Wallet, ArrowDownCircle, ArrowUpCircle, TrendingUp, ListChecks, Tags, Landmark } from 'lucide-react';
 import { auth, signOut } from '@/auth';
 import { dbConnect } from '@/lib/mongoose';
 import { Transaction } from '@/models/Transaction';
+import { Debt } from '@/models/Debt';
+import { BenchmarkRate } from '@/models/BenchmarkRate';
 import { formatTHB, startOfMonth, startOfDayAgo } from '@/lib/finance';
 import { ensureDefaultCategories, listUserCategories, buildCategoryNameMap } from '@/lib/categories';
+import {
+  buildSchedule,
+  resolveDebtTiers,
+  DEFAULT_BENCHMARKS,
+  type BenchmarkRate as BenchmarkRateValue,
+  type DebtKind,
+  type InterestTier,
+} from '@/lib/debt';
 import TransactionForm from '@/components/finance/TransactionForm';
 import TransactionList, { type ListedTransaction } from '@/components/finance/TransactionList';
 import SlipUploader from '@/components/finance/SlipUploader';
 import DailyChart, { type DailyPoint } from '@/components/finance/charts/DailyChart';
 import CategoryChart, { type CategoryPoint } from '@/components/finance/charts/CategoryChart';
 import MonthlyChart, { type MonthlyPoint } from '@/components/finance/charts/MonthlyChart';
+import DebtMonthlyChart, { type DebtMonthlyPoint } from '@/components/finance/charts/DebtMonthlyChart';
+import ExpenseForecastChart, { type ForecastPoint } from '@/components/finance/charts/ExpenseForecastChart';
 
 const TH_MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
 
@@ -39,9 +51,77 @@ export default async function DashboardPage() {
   sixMonthsAgo.setDate(1);
   sixMonthsAgo.setHours(0, 0, 0, 0);
 
-  const txs = await Transaction.find({ userId, date: { $gte: sixMonthsAgo } })
-    .sort({ date: -1, createdAt: -1 })
-    .lean();
+  const [txs, activeDebts, benchmarkDocs] = await Promise.all([
+    Transaction.find({ userId, date: { $gte: sixMonthsAgo } })
+      .sort({ date: -1, createdAt: -1 })
+      .lean(),
+    Debt.find({ userId, status: 'active' }).lean(),
+    BenchmarkRate.find({ userId }).lean(),
+  ]);
+
+  const savedBenchmarkKeys = new Set(benchmarkDocs.map((b) => b.key.toUpperCase()));
+  const benchmarks: BenchmarkRateValue[] = [
+    ...benchmarkDocs.map((b) => ({ key: b.key, value: b.value })),
+    ...Object.entries(DEFAULT_BENCHMARKS)
+      .filter(([k]) => !savedBenchmarkKeys.has(k))
+      .map(([key, value]) => ({ key, value })),
+  ];
+
+  const debtMonthlyData: DebtMonthlyPoint[] = activeDebts.map((d) => {
+    const resolvedTiers = resolveDebtTiers((d.interestTiers ?? []) as InterestTier[], benchmarks);
+    const s = buildSchedule({
+      principal: d.balance > 0 ? d.balance : d.principal,
+      annualPercent: d.interestRate,
+      termMonths: d.termMonths,
+      method: d.method,
+      startDate: new Date(d.startDate),
+      tiers: resolvedTiers.length > 0 ? resolvedTiers : null,
+      convention: d.convention,
+    });
+    return {
+      id: d._id.toString(),
+      name: d.name,
+      kind: d.kind as DebtKind,
+      monthlyPayment: s.monthlyPayment,
+    };
+  });
+  const totalDebtMonthly = debtMonthlyData.reduce((sum, d) => sum + d.monthlyPayment, 0);
+
+  const forecastWindowStart = new Date();
+  forecastWindowStart.setMonth(forecastWindowStart.getMonth() - 3);
+  forecastWindowStart.setDate(1);
+  forecastWindowStart.setHours(0, 0, 0, 0);
+  const currentMonthStart = startOfMonth();
+
+  const pastCategoryTotals: Record<string, number> = {};
+  const pastMonths = new Set<string>();
+  for (const t of txs) {
+    if (t.type !== 'expense') continue;
+    const d = new Date(t.date);
+    if (d >= forecastWindowStart && d < currentMonthStart) {
+      pastCategoryTotals[t.category] = (pastCategoryTotals[t.category] ?? 0) + t.amount;
+      pastMonths.add(`${d.getFullYear()}-${d.getMonth()}`);
+    }
+  }
+  const sampleMonths = Math.max(1, pastMonths.size);
+
+  const forecastData: ForecastPoint[] = [];
+  if (totalDebtMonthly > 0) {
+    forecastData.push({
+      source: 'debt',
+      key: '__debt__',
+      label: 'ภาระผ่อนหนี้สิน',
+      value: totalDebtMonthly,
+    });
+  }
+  for (const [cat, total] of Object.entries(pastCategoryTotals)) {
+    forecastData.push({
+      source: 'category',
+      key: cat,
+      label: cat,
+      value: total / sampleMonths,
+    });
+  }
 
   const monthStart = startOfMonth();
   let monthIncome = 0;
@@ -142,6 +222,13 @@ export default async function DashboardPage() {
 
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             <Link
+              href="/finance/debts"
+              className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] text-neutral-400 hover:text-gold-200 border border-gold-400/20 hover:border-gold-300/50 rounded-full px-3 sm:px-4 py-2 transition-colors"
+            >
+              <Landmark className="w-3.5 h-3.5" />
+              หนี้สิน
+            </Link>
+            <Link
               href="/finance/categories"
               className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] text-neutral-400 hover:text-gold-200 border border-gold-400/20 hover:border-gold-300/50 rounded-full px-3 sm:px-4 py-2 transition-colors"
             >
@@ -166,7 +253,13 @@ export default async function DashboardPage() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <StatCard label="รายรับเดือนนี้" amount={formatTHB(monthIncome)} icon={ArrowDownCircle} accent="text-emerald-300" />
-          <StatCard label="รายจ่ายเดือนนี้" amount={formatTHB(monthExpense)} icon={ArrowUpCircle} accent="text-rose-300" />
+          <StatCard
+            label="รายจ่ายเดือนนี้"
+            amount={formatTHB(monthExpense)}
+            sub={totalDebtMonthly > 0 ? `+ ภาระผ่อนคงที่ ${formatTHB(totalDebtMonthly)}` : undefined}
+            icon={ArrowUpCircle}
+            accent="text-rose-300"
+          />
           <StatCard
             label="คงเหลือสุทธิ"
             amount={formatTHB(net)}
@@ -180,9 +273,14 @@ export default async function DashboardPage() {
           <DailyChart data={dailyData} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 mb-8 sm:mb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 mb-5 sm:mb-6">
           <MonthlyChart data={monthlyData} />
           <CategoryChart data={categoryData} categoryNames={categoryNames} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 mb-8 sm:mb-10">
+          <DebtMonthlyChart data={debtMonthlyData} />
+          <ExpenseForecastChart data={forecastData} categoryNames={categoryNames} sampleMonths={sampleMonths} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 mb-5 sm:mb-6">
@@ -199,11 +297,13 @@ export default async function DashboardPage() {
 function StatCard({
   label,
   amount,
+  sub,
   icon: Icon,
   accent,
 }: {
   label: string;
   amount: string;
+  sub?: string;
   icon: React.ComponentType<{ className?: string }>;
   accent: string;
 }) {
@@ -216,6 +316,7 @@ function StatCard({
         <Icon className={`w-4 h-4 shrink-0 ${accent}`} />
       </div>
       <div className="text-xl sm:text-2xl font-bold text-neutral-50 tabular-nums break-all">{amount}</div>
+      {sub && <div className="mt-1 text-[10px] text-rose-300/80 tabular-nums truncate">{sub}</div>}
     </div>
   );
 }
