@@ -288,7 +288,7 @@ export default async function DashboardPage() {
           <SlipUploader categories={categories} />
         </div>
 
-        <TransactionList transactions={recent} categoryNames={categoryNames} />
+        <TransactionList transactions={recent} categoryNames={categoryNames} categories={categories} />
       </div>
     </main>
   );
